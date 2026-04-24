@@ -21,6 +21,12 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp" />
 
+        <Spinner
+            android:id="@+id/spinnerSortPlayers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp" />
+
         <ImageButton
             android:id="@+id/btnSyncPlayers"
             android:layout_width="36dp"

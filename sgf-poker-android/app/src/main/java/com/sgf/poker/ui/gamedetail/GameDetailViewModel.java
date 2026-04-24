@@ -18,11 +18,14 @@ import com.sgf.poker.usecases.game.UpdateGamePlayerUseCase;
 import com.sgf.poker.usecases.player.FetchPlayersUseCase;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GameDetailViewModel extends AndroidViewModel {
+
+    public enum SortOrder { BY_NAME, BY_POSITION }
 
     private final MutableLiveData<Game> _game = new MutableLiveData<>();
     public final LiveData<Game> game = _game;
@@ -39,6 +42,7 @@ public class GameDetailViewModel extends AndroidViewModel {
     private final FetchPlayersUseCase fetchPlayers;
 
     private String gameId;
+    private SortOrder sortOrder = SortOrder.BY_NAME;
 
     public GameDetailViewModel(@NonNull Application application) {
         super(application);
@@ -73,6 +77,27 @@ public class GameDetailViewModel extends AndroidViewModel {
                 .findFirst()
                 .map(Player::isMember)
                 .orElse(false);
+    }
+
+    public void setSortOrder(SortOrder order) {
+        sortOrder = order;
+        _game.setValue(_game.getValue());
+    }
+
+    public SortOrder getSortOrder() { return sortOrder; }
+
+    public List<GamePlayer> sortedPlayers(List<GamePlayer> players) {
+        Comparator<GamePlayer> byName = Comparator.comparing(
+                (GamePlayer gp) -> playerName(gp.getPlayerId()), String.CASE_INSENSITIVE_ORDER);
+        Comparator<GamePlayer> cmp = switch (sortOrder) {
+            case BY_POSITION -> {
+                Comparator<GamePlayer> byPos = Comparator.comparingInt(
+                        (GamePlayer gp) -> gp.getFinalPosition() != null ? gp.getFinalPosition() : Integer.MAX_VALUE);
+                yield byPos.thenComparing(byName);
+            }
+            default -> byName;
+        };
+        return players.stream().sorted(cmp).collect(Collectors.toList());
     }
 
     // ── GamePlayer intents ────────────────────────────────────────────────────

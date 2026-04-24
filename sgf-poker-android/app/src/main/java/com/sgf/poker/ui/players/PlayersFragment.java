@@ -141,6 +141,7 @@ public class PlayersFragment extends Fragment {
             requireActivity().setTitle(year + " - " + players.size() + " players (" + members + " members)");
         });
 
+
         viewModel.error.observe(getViewLifecycleOwner(), error -> {
             if (error != null) {
                 Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show();

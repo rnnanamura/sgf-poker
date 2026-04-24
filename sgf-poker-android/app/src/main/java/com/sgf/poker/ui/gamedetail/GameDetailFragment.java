@@ -2,6 +2,8 @@ package com.sgf.poker.ui.gamedetail;
 
 import android.os.Bundle;
 import android.view.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ public class GameDetailFragment extends Fragment {
         viewModel.init(gameId);
 
         setupRecyclerView();
+        setupSortDropdown();
         setupPrizesButton();
         observeViewModel();
     }
@@ -48,6 +51,24 @@ public class GameDetailFragment extends Fragment {
         adapter = new GamePlayersAdapter(viewModel);
         binding.recyclerGamePlayers.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerGamePlayers.setAdapter(adapter);
+    }
+
+    private static final String[] SORT_LABELS = {"Name", "Position"};
+
+    private void setupSortDropdown() {
+        var sortAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, SORT_LABELS);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerSortPlayers.setAdapter(sortAdapter);
+        binding.spinnerSortPlayers.setSelection(viewModel.getSortOrder().ordinal());
+        binding.spinnerSortPlayers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                viewModel.setSortOrder(GameDetailViewModel.SortOrder.values()[pos]);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     private void setupPrizesButton() {

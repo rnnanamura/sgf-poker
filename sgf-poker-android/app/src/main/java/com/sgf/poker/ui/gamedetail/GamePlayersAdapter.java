@@ -25,7 +25,7 @@ public class GamePlayersAdapter extends RecyclerView.Adapter<GamePlayersAdapter.
 
     public void submitGame(Game game, GameDetailViewModel vm) {
         this.viewModel = vm;
-        this.gamePlayers = new ArrayList<>(game.getPlayers());
+        this.gamePlayers = vm.sortedPlayers(game.getPlayers());
         notifyDataSetChanged();
     }
 
