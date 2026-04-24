@@ -6,6 +6,8 @@ import android.widget.*;
 
 import java.time.LocalDate;
 
+import com.sgf.poker.ui.players.PlayersViewModel.SortOrder;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,7 @@ public class PlayersFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(PlayersViewModel.class);
 
         setupRecyclerView();
+        setupSortDropdown();
         setupFab();
         observeViewModel();
 
@@ -50,6 +53,24 @@ public class PlayersFragment extends Fragment {
         );
         binding.recyclerPlayers.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerPlayers.setAdapter(adapter);
+    }
+
+    private static final String[] SORT_LABELS = {"Name", "Points", "Founders & Members"};
+
+    private void setupSortDropdown() {
+        var sortAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, SORT_LABELS);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerSort.setAdapter(sortAdapter);
+        binding.spinnerSort.setSelection(viewModel.getSortOrder().ordinal());
+        binding.spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                viewModel.setSortOrder(SortOrder.values()[pos]);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     private void setupFab() {
@@ -80,10 +101,14 @@ public class PlayersFragment extends Fragment {
         var etName    = dialogView.<EditText>findViewById(com.sgf.poker.R.id.etPlayerName);
         var cbMember  = dialogView.<CheckBox>findViewById(com.sgf.poker.R.id.cbMember);
         var cbFounder = dialogView.<CheckBox>findViewById(com.sgf.poker.R.id.cbFounder);
+        View tilPoints = dialogView.findViewById(com.sgf.poker.R.id.tilPoints);
+        var etPoints  = dialogView.<EditText>findViewById(com.sgf.poker.R.id.etPoints);
 
         etName.setText(player.getName());
         cbMember.setChecked(player.isMember());
         cbFounder.setChecked(player.isFounder());
+        tilPoints.setVisibility(View.VISIBLE);
+        etPoints.setText(String.valueOf(player.getCurrentPoints()));
 
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Edit Player")
@@ -91,8 +116,14 @@ public class PlayersFragment extends Fragment {
                 .setPositiveButton("Save", (d, w) -> {
                     var name = etName.getText().toString().trim();
                     if (!name.isEmpty()) {
+                        int points;
+                        try {
+                            points = Integer.parseInt(etPoints.getText().toString().trim());
+                        } catch (NumberFormatException e) {
+                            points = player.getCurrentPoints();
+                        }
                         viewModel.editPlayer(player.getId(), name,
-                                cbMember.isChecked(), cbFounder.isChecked());
+                                cbMember.isChecked(), cbFounder.isChecked(), points);
                     }
                 })
                 .setNegativeButton("Cancel", null)

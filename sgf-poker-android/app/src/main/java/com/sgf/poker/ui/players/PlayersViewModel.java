@@ -14,15 +14,22 @@ import com.sgf.poker.usecases.player.DeletePlayerUseCase;
 import com.sgf.poker.usecases.player.FetchPlayersUseCase;
 import com.sgf.poker.usecases.player.UpdatePlayerUseCase;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayersViewModel extends AndroidViewModel {
+
+    public enum SortOrder { BY_NAME, BY_POINTS, BY_ROLE }
 
     private final MutableLiveData<List<Player>> _players = new MutableLiveData<>(List.of());
     public final LiveData<List<Player>> players = _players;
 
     private final MutableLiveData<String> _error = new MutableLiveData<>(null);
     public final LiveData<String> error = _error;
+
+    private List<Player> rawPlayers = List.of();
+    private SortOrder sortOrder = SortOrder.BY_NAME;
 
     private final FetchPlayersUseCase fetchPlayers;
     private final CreatePlayerUseCase createPlayer;
@@ -40,10 +47,32 @@ public class PlayersViewModel extends AndroidViewModel {
 
     public void loadPlayers() {
         try {
-            _players.setValue(fetchPlayers.execute());
+            rawPlayers = fetchPlayers.execute();
+            _players.setValue(sorted(rawPlayers));
         } catch (Exception e) {
             _error.setValue(e.getMessage());
         }
+    }
+
+    public void setSortOrder(SortOrder order) {
+        sortOrder = order;
+        _players.setValue(sorted(rawPlayers));
+    }
+
+    public SortOrder getSortOrder() { return sortOrder; }
+
+    private List<Player> sorted(List<Player> list) {
+        Comparator<Player> byName = Comparator.comparing(Player::getName, String.CASE_INSENSITIVE_ORDER);
+        Comparator<Player> cmp = switch (sortOrder) {
+            case BY_POINTS -> Comparator.comparingInt(Player::getCurrentPoints).reversed().thenComparing(byName);
+            case BY_ROLE -> {
+                Comparator<Player> byRole = Comparator.comparingInt(
+                        (Player p) -> p.isFounder() ? 0 : p.isMember() ? 1 : 2);
+                yield byRole.thenComparing(byName);
+            }
+            default -> byName;
+        };
+        return list.stream().sorted(cmp).collect(Collectors.toList());
     }
 
     public void addPlayer(String name, boolean isMember, boolean isFounder) {
@@ -75,9 +104,9 @@ public class PlayersViewModel extends AndroidViewModel {
         }
     }
 
-    public void editPlayer(String playerId, String name, boolean isMember, boolean isFounder) {
+    public void editPlayer(String playerId, String name, boolean isMember, boolean isFounder, int points) {
         try {
-            updatePlayer.execute(playerId, p -> p.withName(name).withMember(isMember).withFounder(isFounder));
+            updatePlayer.execute(playerId, p -> p.withName(name).withMember(isMember).withFounder(isFounder).withPoints(points));
             loadPlayers();
         } catch (Exception e) {
             _error.setValue(e.getMessage());
