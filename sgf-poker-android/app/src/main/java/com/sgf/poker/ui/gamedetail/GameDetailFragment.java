@@ -57,6 +57,7 @@ public class GameDetailFragment extends Fragment {
             var action = GameDetailFragmentDirections.actionDetailToPrizes(gameId);
             Navigation.findNavController(requireView()).navigate(action);
         });
+        binding.btnSyncPlayers.setOnClickListener(v -> viewModel.syncNewPlayers());
     }
 
     private void observeViewModel() {

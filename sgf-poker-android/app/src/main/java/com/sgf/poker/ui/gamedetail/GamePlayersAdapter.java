@@ -60,6 +60,7 @@ public class GamePlayersAdapter extends RecyclerView.Adapter<GamePlayersAdapter.
 
         void bind(GamePlayer gp) {
             b.textPlayerName.setText(viewModel.playerName(gp.getPlayerId()));
+            b.iconMember.setVisibility(viewModel.playerIsMember(gp.getPlayerId()) ? View.VISIBLE : View.GONE);
 
             // Checkboxes — suppress listener during programmatic set
             b.checkComing.setOnCheckedChangeListener(null);

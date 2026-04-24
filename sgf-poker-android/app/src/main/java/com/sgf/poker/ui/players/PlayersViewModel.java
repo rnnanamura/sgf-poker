@@ -75,6 +75,15 @@ public class PlayersViewModel extends AndroidViewModel {
         }
     }
 
+    public void editPlayer(String playerId, String name, boolean isMember, boolean isFounder) {
+        try {
+            updatePlayer.execute(playerId, p -> p.withName(name).withMember(isMember).withFounder(isFounder));
+            loadPlayers();
+        } catch (Exception e) {
+            _error.setValue(e.getMessage());
+        }
+    }
+
     public void toggleFounder(String playerId) {
         try {
             updatePlayer.execute(playerId, p -> p.withFounder(!p.isFounder()));

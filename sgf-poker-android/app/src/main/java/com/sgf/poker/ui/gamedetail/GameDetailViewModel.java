@@ -7,15 +7,20 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.sgf.poker.data.repository.GameRepository;
 import com.sgf.poker.data.repository.LocalStorageGameRepository;
 import com.sgf.poker.data.repository.LocalStoragePlayerRepository;
 import com.sgf.poker.domain.model.Game;
+import com.sgf.poker.domain.model.GamePlayer;
 import com.sgf.poker.domain.model.Player;
 import com.sgf.poker.usecases.game.FetchGamesUseCase;
 import com.sgf.poker.usecases.game.UpdateGamePlayerUseCase;
 import com.sgf.poker.usecases.player.FetchPlayersUseCase;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GameDetailViewModel extends AndroidViewModel {
 
@@ -28,6 +33,7 @@ public class GameDetailViewModel extends AndroidViewModel {
     private final MutableLiveData<String> _error = new MutableLiveData<>(null);
     public final LiveData<String> error = _error;
 
+    private final GameRepository gameRepo;
     private final FetchGamesUseCase fetchGames;
     private final UpdateGamePlayerUseCase updateGamePlayer;
     private final FetchPlayersUseCase fetchPlayers;
@@ -36,8 +42,8 @@ public class GameDetailViewModel extends AndroidViewModel {
 
     public GameDetailViewModel(@NonNull Application application) {
         super(application);
-        var gameRepo   = new LocalStorageGameRepository(application);
-        var playerRepo = new LocalStoragePlayerRepository(application);
+        gameRepo         = new LocalStorageGameRepository(application);
+        var playerRepo   = new LocalStoragePlayerRepository(application);
         fetchGames       = new FetchGamesUseCase(gameRepo);
         updateGamePlayer = new UpdateGamePlayerUseCase(gameRepo);
         fetchPlayers     = new FetchPlayersUseCase(playerRepo);
@@ -58,6 +64,15 @@ public class GameDetailViewModel extends AndroidViewModel {
                 .map(Player::getName)
                 .findFirst()
                 .orElse("Unknown");
+    }
+
+    public boolean playerIsMember(String playerId) {
+        if (_players.getValue() == null) return false;
+        return _players.getValue().stream()
+                .filter(p -> p.getId().equals(playerId))
+                .findFirst()
+                .map(Player::isMember)
+                .orElse(false);
     }
 
     // ── GamePlayer intents ────────────────────────────────────────────────────
@@ -84,6 +99,34 @@ public class GameDetailViewModel extends AndroidViewModel {
 
     public void setFinalPosition(String gamePlayerId, Integer position) {
         mutate(gamePlayerId, gp -> gp.withFinalPosition(position));
+    }
+
+    public void syncNewPlayers() {
+        try {
+            var currentGame = _game.getValue();
+            if (currentGame == null) return;
+
+            Set<String> existing = currentGame.getPlayers().stream()
+                    .map(GamePlayer::getPlayerId)
+                    .collect(Collectors.toSet());
+
+            var newGamePlayers = fetchPlayers.execute().stream()
+                    .filter(p -> !existing.contains(p.getId()))
+                    .map(p -> GamePlayer.forPlayer(p.getId()))
+                    .collect(Collectors.toList());
+
+            if (newGamePlayers.isEmpty()) return;
+
+            var merged = new ArrayList<>(currentGame.getPlayers());
+            merged.addAll(newGamePlayers);
+            var updatedGame = currentGame.withPlayers(merged);
+            gameRepo.save(updatedGame);
+
+            loadPlayers();
+            _game.setValue(updatedGame);
+        } catch (Exception e) {
+            _error.setValue(e.getMessage());
+        }
     }
 
     // ── Private ───────────────────────────────────────────────────────────────

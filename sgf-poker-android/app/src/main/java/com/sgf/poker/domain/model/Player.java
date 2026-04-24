@@ -34,6 +34,7 @@ public class Player {
 
     // ── Mutation helpers (return new instance) ────────────────────────────────
 
+    public Player withName(String val)          { return new Player(id, val,  isMember, isFounder, currentPoints); }
     public Player withMember(boolean val)       { return new Player(id, name, val,      isFounder, currentPoints); }
     public Player withFounder(boolean val)      { return new Player(id, name, isMember, val,       currentPoints); }
     public Player withPoints(int val)           { return new Player(id, name, isMember, isFounder, val); }

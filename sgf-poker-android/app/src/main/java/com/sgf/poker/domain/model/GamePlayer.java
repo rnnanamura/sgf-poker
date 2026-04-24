@@ -48,8 +48,9 @@ public class GamePlayer {
     // ── Mutation helpers (return new instance) ────────────────────────────────
 
     public GamePlayer withComing(boolean val)         { return new GamePlayer(id, playerId, val,    present, payed, rebuyCount, finalPosition); }
-    public GamePlayer withPresent(boolean val)        { return new GamePlayer(id, playerId, coming, val,     payed, rebuyCount, finalPosition); }
-    public GamePlayer withPayed(boolean val)          { return new GamePlayer(id, playerId, coming, present, val,   rebuyCount, finalPosition); }
+    public GamePlayer withPresent(boolean val)        { return new GamePlayer(id, playerId, val || coming, val, payed, rebuyCount, finalPosition); }
+    public GamePlayer withPayed(boolean val)          { return new GamePlayer(id, playerId, val ||
+            coming, val || present, val,   rebuyCount, finalPosition); }
     public GamePlayer withRebuyCount(int val)         { return new GamePlayer(id, playerId, coming, present, payed, val,        finalPosition); }
     public GamePlayer withFinalPosition(Integer val)  { return new GamePlayer(id, playerId, coming, present, payed, rebuyCount, val); }
 
