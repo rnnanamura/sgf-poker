@@ -73,6 +73,22 @@ public class PrizesViewModel extends AndroidViewModel {
         }
     }
 
+    public void setOverridePrizeAmount(String gamePlayerId, double amount) {
+        if (currentGame == null) return;
+        try {
+            var target = currentGame.getPlayers().stream()
+                    .filter(gp -> gp.getId().equals(gamePlayerId))
+                    .findFirst()
+                    .orElseThrow();
+            var updated = currentGame.withUpdatedPlayer(target.withOverridePrizeAmount(amount));
+            gameRepo.save(updated);
+            currentGame = updated;
+            _calculation.setValue(calculatePrizes.execute(updated, currentPlayers));
+        } catch (Exception e) {
+            _error.setValue(e.getMessage());
+        }
+    }
+
     /** Clears whatever player is currently assigned to the given award position. */
     public void unassignPosition(int position) {
         if (currentGame == null) return;

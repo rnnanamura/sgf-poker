@@ -85,7 +85,10 @@ public class GameDetailFragment extends Fragment {
         viewModel.game.observe(getViewLifecycleOwner(), game -> {
             if (game == null) return;
             requireActivity().setTitle(game.getName());
-            binding.textPlayerCount.setText(game.getPlayers().size() + " players");
+            binding.textComingCount.setText(game.getConfirmedPlayers().size() + " coming");
+            binding.textPresentCount.setText(game.getPresentPlayers().size() + " present");
+            int paidCount = (int) game.getPlayers().stream().filter(gp -> gp.isPayed()).count();
+            binding.textPaidCount.setText(paidCount + " paid");
             adapter.submitGame(game, viewModel);
         });
 

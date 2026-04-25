@@ -2,6 +2,7 @@ package com.sgf.poker.ui.prizes;
 
 import android.graphics.Color;
 import android.view.*;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
@@ -14,6 +15,7 @@ import com.sgf.poker.databinding.ItemPrizeBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class PrizesAdapter extends ListAdapter<PrizeLine, PrizesAdapter.ViewHolder> {
 
@@ -47,7 +49,7 @@ public class PrizesAdapter extends ListAdapter<PrizeLine, PrizesAdapter.ViewHold
             super(binding.getRoot());
             b = binding;
 
-            // Build spinner options: "— unassigned —" + one entry per payed player
+            // Spinner: "— unassigned —" + one entry per payed player
             var names = new ArrayList<String>();
             names.add("— unassigned —");
             for (var pp : payedPlayers) names.add(pp.name());
@@ -75,6 +77,23 @@ public class PrizesAdapter extends ListAdapter<PrizeLine, PrizesAdapter.ViewHold
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
+
+            b.editPrizeAmount.setOnFocusChangeListener((v, hasFocus) -> {
+                if (!hasFocus && !isBinding && currentLine != null
+                        && currentLine.gamePlayerId() != null) {
+                    commitAmount();
+                }
+            });
+
+            b.editPrizeAmount.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (!isBinding && currentLine != null && currentLine.gamePlayerId() != null) {
+                        commitAmount();
+                    }
+                    v.clearFocus();
+                }
+                return false;
+            });
         }
 
         void bind(PrizeLine line) {
@@ -82,9 +101,7 @@ public class PrizesAdapter extends ListAdapter<PrizeLine, PrizesAdapter.ViewHold
             currentLine = line;
 
             b.textPosition.setText(String.valueOf(line.position()));
-            b.textPrizeAmount.setText(viewModel.formatCurrency(line.amount()));
 
-            // Medal color for top 3
             int color = switch (line.position()) {
                 case 1 -> Color.parseColor("#FFD700");
                 case 2 -> Color.parseColor("#C0C0C0");
@@ -93,7 +110,9 @@ public class PrizesAdapter extends ListAdapter<PrizeLine, PrizesAdapter.ViewHold
             };
             b.textPosition.setTextColor(color);
 
-            // Set spinner to current assignment (or 0 for unassigned)
+            b.editPrizeAmount.setText(String.format(Locale.US, "%.2f", line.amount()));
+            b.editPrizeAmount.setEnabled(line.gamePlayerId() != null);
+
             int selectionIndex = 0;
             if (line.gamePlayerId() != null) {
                 for (int i = 0; i < payedPlayers.size(); i++) {
@@ -106,6 +125,15 @@ public class PrizesAdapter extends ListAdapter<PrizeLine, PrizesAdapter.ViewHold
             b.spinnerPlayer.setSelection(selectionIndex);
 
             isBinding = false;
+        }
+
+        private void commitAmount() {
+            try {
+                double amount = Double.parseDouble(b.editPrizeAmount.getText().toString());
+                viewModel.setOverridePrizeAmount(currentLine.gamePlayerId(), amount);
+            } catch (NumberFormatException e) {
+                b.editPrizeAmount.setText(String.format(Locale.US, "%.2f", currentLine.amount()));
+            }
         }
     }
 

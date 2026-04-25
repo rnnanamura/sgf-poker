@@ -129,14 +129,19 @@ public class PrizesFragment extends Fragment {
             var lines = new ArrayList<PrizeLine>();
             for (int i = 0; i < calc.distribution().size(); i++) {
                 int pos = i + 1;
-                double amount = calc.prizePool() * calc.distribution().get(i);
                 var assigned = prizeByPosition.get(pos);
+                double amount = assigned != null
+                        ? assigned.prizeAmount()
+                        : calc.prizePool() * calc.distribution().get(i);
                 lines.add(new PrizeLine(
                         pos, amount,
                         assigned != null ? assigned.gamePlayerId() : null,
                         assigned != null ? assigned.playerName() : null));
             }
             adapter.submitList(lines);
+
+            double winnersTotal = lines.stream().mapToDouble(PrizeLine::amount).sum();
+            binding.textWinnersTotal.setText("Total: " + viewModel.formatCurrency(winnersTotal));
 
             // Unranked warning
             if (calc.unrankedCount() > 0) {

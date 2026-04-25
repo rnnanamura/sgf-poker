@@ -16,6 +16,7 @@ public class GamePlayer {
     private final boolean payed;
     private final int rebuyCount;
     private final Integer finalPosition; // null = not yet ranked
+    private final Double overridePrizeAmount; // null = use calculated amount
 
     public GamePlayer(
             String id,
@@ -24,7 +25,8 @@ public class GamePlayer {
             boolean present,
             boolean payed,
             int rebuyCount,
-            Integer finalPosition) {
+            Integer finalPosition,
+            Double overridePrizeAmount) {
         this.id = id;
         this.playerId = playerId;
         this.coming = coming;
@@ -32,12 +34,13 @@ public class GamePlayer {
         this.payed = payed;
         this.rebuyCount = rebuyCount;
         this.finalPosition = finalPosition;
+        this.overridePrizeAmount = overridePrizeAmount;
     }
 
     /** Factory — new GamePlayer seeded from an existing Player. */
     public static GamePlayer forPlayer(String playerId) {
         return new GamePlayer(UUID.randomUUID().toString(), playerId,
-                false, false, false, 0, null);
+                false, false, false, 0, null, null);
     }
 
     // ── Derived ──────────────────────────────────────────────────────────────
@@ -47,22 +50,23 @@ public class GamePlayer {
 
     // ── Mutation helpers (return new instance) ────────────────────────────────
 
-    public GamePlayer withComing(boolean val)         { return new GamePlayer(id, playerId, val,    present, payed, rebuyCount, finalPosition); }
-    public GamePlayer withPresent(boolean val)        { return new GamePlayer(id, playerId, val || coming, val, payed, rebuyCount, finalPosition); }
-    public GamePlayer withPayed(boolean val)          { return new GamePlayer(id, playerId, val ||
-            coming, val || present, val,   rebuyCount, finalPosition); }
-    public GamePlayer withRebuyCount(int val)         { return new GamePlayer(id, playerId, coming, present, payed, val,        finalPosition); }
-    public GamePlayer withFinalPosition(Integer val)  { return new GamePlayer(id, playerId, coming, present, payed, rebuyCount, val); }
+    public GamePlayer withComing(boolean val)                { return new GamePlayer(id, playerId, val, present, payed, rebuyCount, finalPosition, overridePrizeAmount); }
+    public GamePlayer withPresent(boolean val)               { return new GamePlayer(id, playerId, val || coming, val, payed, rebuyCount, finalPosition, overridePrizeAmount); }
+    public GamePlayer withPayed(boolean val)                 { return new GamePlayer(id, playerId, val || coming, val || present, val, rebuyCount, finalPosition, overridePrizeAmount); }
+    public GamePlayer withRebuyCount(int val)                { return new GamePlayer(id, playerId, coming, present, payed, val, finalPosition, overridePrizeAmount); }
+    public GamePlayer withFinalPosition(Integer val)         { return new GamePlayer(id, playerId, coming, present, payed, rebuyCount, val, overridePrizeAmount); }
+    public GamePlayer withOverridePrizeAmount(Double val)    { return new GamePlayer(id, playerId, coming, present, payed, rebuyCount, finalPosition, val); }
 
     // ── Accessors ─────────────────────────────────────────────────────────────
 
-    public String getId()            { return id; }
-    public String getPlayerId()      { return playerId; }
-    public boolean isComing()        { return coming; }
-    public boolean isPresent()       { return present; }
-    public boolean isPayed()         { return payed; }
-    public int getRebuyCount()       { return rebuyCount; }
-    public Integer getFinalPosition(){ return finalPosition; }
+    public String getId()                   { return id; }
+    public String getPlayerId()             { return playerId; }
+    public boolean isComing()               { return coming; }
+    public boolean isPresent()              { return present; }
+    public boolean isPayed()                { return payed; }
+    public int getRebuyCount()              { return rebuyCount; }
+    public Integer getFinalPosition()       { return finalPosition; }
+    public Double getOverridePrizeAmount()  { return overridePrizeAmount; }
 
     @Override
     public boolean equals(Object o) {

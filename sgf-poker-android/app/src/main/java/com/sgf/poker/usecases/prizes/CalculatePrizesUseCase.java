@@ -50,7 +50,10 @@ public class CalculatePrizesUseCase {
                     double fee  = player != null && player.isEligibleForMemberFee()
                             ? PrizeRules.MEMBER_ENTRY_FEE : PrizeRules.NON_MEMBER_ENTRY_FEE;
                     int pos = gp.getFinalPosition() != null ? gp.getFinalPosition() : i + 1;
-                    return new PlayerPrize(gp.getId(), name, pos, fee, prizePool * distribution.get(i));
+                    double amount = gp.getOverridePrizeAmount() != null
+                            ? gp.getOverridePrizeAmount()
+                            : prizePool * distribution.get(i);
+                    return new PlayerPrize(gp.getId(), name, pos, fee, amount);
                 })
                 .collect(Collectors.toList());
 

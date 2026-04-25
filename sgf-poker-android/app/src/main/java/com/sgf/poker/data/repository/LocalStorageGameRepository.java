@@ -124,6 +124,7 @@ public class LocalStorageGameRepository implements GameRepository {
         boolean coming, present, payed;
         int rebuyCount;
         Integer finalPosition;
+        Double overridePrizeAmount;
 
         static GamePlayerDto from(GamePlayer gp) {
             var dto = new GamePlayerDto();
@@ -131,11 +132,12 @@ public class LocalStorageGameRepository implements GameRepository {
             dto.coming = gp.isComing(); dto.present = gp.isPresent();
             dto.payed = gp.isPayed(); dto.rebuyCount = gp.getRebuyCount();
             dto.finalPosition = gp.getFinalPosition();
+            dto.overridePrizeAmount = gp.getOverridePrizeAmount();
             return dto;
         }
 
         GamePlayer toDomain() {
-            return new GamePlayer(id, playerId, coming, present, payed, rebuyCount, finalPosition);
+            return new GamePlayer(id, playerId, coming, present, payed, rebuyCount, finalPosition, overridePrizeAmount);
         }
     }
 
