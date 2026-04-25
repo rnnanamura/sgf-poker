@@ -19,8 +19,10 @@ public class CalculatePrizesUseCase {
         }).count();
         int nonMemberCount = presentCount - memberCount;
 
-        double entryFeeTotal = memberCount    * PrizeRules.MEMBER_ENTRY_FEE
+        double totalCollected = memberCount    * PrizeRules.MEMBER_ENTRY_FEE
                              + nonMemberCount * PrizeRules.NON_MEMBER_ENTRY_FEE;
+        double nonMemberFeeTotal = nonMemberCount * (PrizeRules.NON_MEMBER_ENTRY_FEE - PrizeRules.MEMBER_ENTRY_FEE);
+        double entryFeeTotal = totalCollected - nonMemberFeeTotal;
 
         int totalRebuys = presentGPs.stream().mapToInt(GamePlayer::getRebuyCount).sum();
         double rebuyTotal = totalRebuys * PrizeRules.REBUY_AMOUNT;
@@ -54,7 +56,7 @@ public class CalculatePrizesUseCase {
 
         return new PrizeCalculation(
                 presentCount, memberCount, nonMemberCount, totalRebuys,
-                totalPool, bountyPool, prizePool, distribution, prizes,
+                totalCollected, nonMemberFeeTotal, totalPool,  bountyPool, prizePool, distribution, prizes,
                 presentCount - ranked.size());
     }
 

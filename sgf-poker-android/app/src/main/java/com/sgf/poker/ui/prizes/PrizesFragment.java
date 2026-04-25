@@ -106,6 +106,8 @@ public class PrizesFragment extends Fragment {
                     viewModel.formatCurrency(calc.totalRebuys() * PrizeRules.REBUY_AMOUNT)));
 
             // Pool
+            binding.textTotalCollected.setText(viewModel.formatCurrency(calc.totalCollected()));
+            binding.textNonMemberFeeTotal.setText(viewModel.formatCurrency(calc.nonMemberFeeTotal()));
             binding.textTotalPool.setText(viewModel.formatCurrency(calc.totalPool()));
             binding.textBountyPool.setText(viewModel.formatCurrency(calc.bountyPool()) + "  (20%)");
             binding.textPrizePool.setText(viewModel.formatCurrency(calc.prizePool()) + "  (80%)");
