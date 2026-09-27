@@ -60,7 +60,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Delete game"
             android:src="@android:drawable/ic_menu_delete"
-            app:tint="@color/error" />
+            app:tint="?attr/colorError" />
 
     </LinearLayout>
 

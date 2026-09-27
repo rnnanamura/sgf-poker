@@ -62,3 +62,13 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 .DS_Store
+
+**/build/
+
+target/
+
+**/.idea/
+
+*.swp
+
+**/caches/

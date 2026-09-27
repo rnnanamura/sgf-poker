@@ -5,7 +5,11 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -23,6 +27,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Always lay out edge to edge: without this the window keeps the system-bar insets
+        // after an AppCompat night-mode recreate, and the toolbar color stops reaching
+        // behind the status bar. applyWindowInsets() puts the insets back where they belong.
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -40,6 +50,29 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         binding.navView.setNavigationItemSelectedListener(this);
+
+        applyWindowInsets();
+    }
+
+    /**
+     * From API 35 the app is laid out edge to edge, so the toolbar and the fragment
+     * container have to pay for the system bars themselves. Padding the toolbar (instead of
+     * the window) keeps its background painted behind the status bar in both themes.
+     */
+    private void applyWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar, (view, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            view.setPadding(bars.left, bars.top, bars.right, 0);
+            return windowInsets;
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.navHostFragment, (view, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            view.setPadding(bars.left, 0, bars.right, bars.bottom);
+            return windowInsets;
+        });
     }
 
     @Override

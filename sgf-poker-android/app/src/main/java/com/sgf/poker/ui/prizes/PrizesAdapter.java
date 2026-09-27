@@ -1,16 +1,17 @@
 package com.sgf.poker.ui.prizes;
 
-import android.graphics.Color;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sgf.poker.R;
 import com.sgf.poker.databinding.ItemPrizeBinding;
 
 import java.util.ArrayList;
@@ -102,13 +103,14 @@ public class PrizesAdapter extends ListAdapter<PrizeLine, PrizesAdapter.ViewHold
 
             b.textPosition.setText(String.valueOf(line.position()));
 
-            int color = switch (line.position()) {
-                case 1 -> Color.parseColor("#FFD700");
-                case 2 -> Color.parseColor("#C0C0C0");
-                case 3 -> Color.parseColor("#CD7F32");
-                default -> Color.parseColor("#888888");
+            int medalColor = switch (line.position()) {
+                case 1 -> R.color.medal_gold;
+                case 2 -> R.color.medal_silver;
+                case 3 -> R.color.medal_bronze;
+                default -> R.color.medal_none;
             };
-            b.textPosition.setTextColor(color);
+            b.textPosition.setTextColor(
+                    ContextCompat.getColor(b.getRoot().getContext(), medalColor));
 
             b.editPrizeAmount.setText(String.format(Locale.US, "%.2f", line.amount()));
             b.editPrizeAmount.setEnabled(line.gamePlayerId() != null);

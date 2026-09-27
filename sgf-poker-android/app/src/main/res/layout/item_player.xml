@@ -44,7 +44,7 @@
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"
                     android:text="Founder"
-                    android:textColor="#7B1FA2"
+                    android:textColor="@color/badge_founder"
                     android:textSize="11sp"
                     android:visibility="gone" />
 
@@ -57,7 +57,7 @@
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"
                     android:text="Member"
-                    android:textColor="#1565C0"
+                    android:textColor="@color/badge_member"
                     android:textSize="11sp"
                     android:visibility="gone" />
 
@@ -69,7 +69,7 @@
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"
                     android:text="Guest"
-                    android:textColor="#555555"
+                    android:textColor="@color/badge_guest"
                     android:textSize="11sp"
                     android:visibility="gone" />
 
@@ -102,7 +102,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Toggle founder"
             android:src="@android:drawable/btn_star"
-            app:tint="#7B1FA2" />
+            app:tint="@color/badge_founder" />
 
         <ImageButton
             android:id="@+id/btnToggleMember"
@@ -111,7 +111,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Toggle member"
             android:src="@android:drawable/ic_menu_my_calendar"
-            app:tint="#1565C0" />
+            app:tint="@color/badge_member" />
 
         <ImageButton
             android:id="@+id/btnDelete"
@@ -120,7 +120,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Delete player"
             android:src="@android:drawable/ic_menu_delete"
-            app:tint="@color/error" />
+            app:tint="?attr/colorError" />
 
     </LinearLayout>
 

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Material 3 DARK color scheme for SGF-Poker. Same resource names as
+  res/values/colors.xml, so Theme.SGFPoker picks these up automatically in dark mode.
+-->
+<resources>
+
+    <!-- Primary -->
+    <color name="md_primary">#8AD49A</color>
+    <color name="md_on_primary">#00391A</color>
+    <color name="md_primary_container">#005226</color>
+    <color name="md_on_primary_container">#A5F0B5</color>
+    <color name="md_inverse_primary">#1B6B3A</color>
+
+    <!-- Secondary (chip gold) -->
+    <color name="md_secondary">#DCC76D</color>
+    <color name="md_on_secondary">#3A3000</color>
+    <color name="md_secondary_container">#534600</color>
+    <color name="md_on_secondary_container">#F9E48B</color>
+
+    <!-- Tertiary (card red) -->
+    <color name="md_tertiary">#FFB3B4</color>
+    <color name="md_on_tertiary">#5F1219</color>
+    <color name="md_tertiary_container">#7D2A30</color>
+    <color name="md_on_tertiary_container">#FFDAD9</color>
+
+    <!-- Error -->
+    <color name="md_error">#FFB4AB</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
+    <color name="md_on_error_container">#FFDAD6</color>
+
+    <!-- Surfaces -->
+    <color name="md_background">#101410</color>
+    <color name="md_on_background">#E1E4DE</color>
+    <color name="md_surface">#101410</color>
+    <color name="md_on_surface">#E1E4DE</color>
+    <color name="md_surface_variant">#414941</color>
+    <color name="md_on_surface_variant">#C1C9BE</color>
+    <color name="md_surface_container_lowest">#0B0F0B</color>
+    <color name="md_surface_container_low">#191D19</color>
+    <color name="md_surface_container">#1D211D</color>
+    <color name="md_surface_container_high">#262B26</color>
+    <color name="md_surface_container_highest">#313631</color>
+    <color name="md_surface_inverse">#E1E4DE</color>
+    <color name="md_on_surface_inverse">#2E312E</color>
+
+    <!-- Outlines / scrim -->
+    <color name="md_outline">#8B938A</color>
+    <color name="md_outline_variant">#414941</color>
+    <color name="md_scrim">#000000</color>
+
+    <!-- App semantic colors, lightened for contrast on dark surfaces -->
+    <color name="badge_founder">#E0B4F5</color>
+    <color name="badge_member">#9ECAFF</color>
+    <color name="badge_guest">#BFC8BD</color>
+    <color name="badge_outline">#5A625A</color>
+
+    <color name="medal_gold">#FFD65A</color>
+    <color name="medal_silver">#C7CBD1</color>
+    <color name="medal_bronze">#E0A164</color>
+    <color name="medal_none">#9AA29A</color>
+
+    <color name="bounty">#FFB77A</color>
+    <color name="warning_container">#3A2A14</color>
+    <color name="on_warning_container">#FFCC9B</color>
+
+</resources>

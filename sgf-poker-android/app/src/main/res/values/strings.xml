@@ -2,4 +2,17 @@
     <string name="app_name">SGF-Poker</string>
     <string name="nav_open">Open navigation drawer</string>
     <string name="nav_close">Close navigation drawer</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">APPEARANCE</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_summary">Choose how SGF-Poker looks.</string>
+    <string name="settings_theme_system">Follow system</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_palette">PALETTE</string>
+    <string name="settings_swatch_primary">Primary</string>
+    <string name="settings_swatch_secondary">Secondary</string>
+    <string name="settings_swatch_tertiary">Tertiary</string>
+    <string name="settings_swatch_error">Error</string>
 </resources>

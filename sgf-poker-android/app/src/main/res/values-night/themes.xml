@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Dark mode only overrides the system-bar contrast flags; every color role
+      comes from Base.Theme.SGFPoker resolving res/values-night/colors.xml.
+    -->
+    <style name="Theme.SGFPoker" parent="Base.Theme.SGFPoker">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+    </style>
+
+</resources>

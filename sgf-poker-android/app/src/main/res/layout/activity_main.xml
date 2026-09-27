@@ -12,14 +12,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
+        <!-- wrap_content + minHeight so the status bar inset can be added as padding
+             and the toolbar background still paints behind the status bar -->
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            android:title="@string/app_name"
-            android:titleTextColor="@android:color/white" />
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:title="@string/app_name" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"

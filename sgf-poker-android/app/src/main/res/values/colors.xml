@@ -1,11 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Material 3 LIGHT color scheme for SGF-Poker.
+  Source palette: poker-felt green (primary), chip gold (secondary), card red (tertiary).
+  The dark counterpart lives in res/values-night/colors.xml and uses the exact same
+  resource names, so themes.xml never has to be duplicated per mode.
+-->
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="error">#B00020</color>
+
+    <!-- Primary -->
+    <color name="md_primary">#1B6B3A</color>
+    <color name="md_on_primary">#FFFFFF</color>
+    <color name="md_primary_container">#A5F0B5</color>
+    <color name="md_on_primary_container">#00210C</color>
+    <color name="md_inverse_primary">#8AD49A</color>
+
+    <!-- Secondary (chip gold) -->
+    <color name="md_secondary">#6D5E00</color>
+    <color name="md_on_secondary">#FFFFFF</color>
+    <color name="md_secondary_container">#F9E48B</color>
+    <color name="md_on_secondary_container">#221B00</color>
+
+    <!-- Tertiary (card red) -->
+    <color name="md_tertiary">#9C4146</color>
+    <color name="md_on_tertiary">#FFFFFF</color>
+    <color name="md_tertiary_container">#FFDAD9</color>
+    <color name="md_on_tertiary_container">#40000A</color>
+
+    <!-- Error -->
+    <color name="md_error">#BA1A1A</color>
+    <color name="md_on_error">#FFFFFF</color>
+    <color name="md_error_container">#FFDAD6</color>
+    <color name="md_on_error_container">#410002</color>
+
+    <!-- Surfaces -->
+    <color name="md_background">#FBFDF7</color>
+    <color name="md_on_background">#191C19</color>
+    <color name="md_surface">#FBFDF7</color>
+    <color name="md_on_surface">#191C19</color>
+    <color name="md_surface_variant">#DDE5DA</color>
+    <color name="md_on_surface_variant">#414941</color>
+    <color name="md_surface_container_lowest">#FFFFFF</color>
+    <color name="md_surface_container_low">#F5F8F2</color>
+    <color name="md_surface_container">#EFF2EC</color>
+    <color name="md_surface_container_high">#E9EFE7</color>
+    <color name="md_surface_container_highest">#E3E9E1</color>
+    <color name="md_surface_inverse">#2E312E</color>
+    <color name="md_on_surface_inverse">#F0F2EC</color>
+
+    <!-- Outlines / scrim -->
+    <color name="md_outline">#717970</color>
+    <color name="md_outline_variant">#C1C9BE</color>
+    <color name="md_scrim">#000000</color>
+
+    <!-- App semantic colors (also night-swapped) -->
+    <color name="badge_founder">#7B1FA2</color>
+    <color name="badge_member">#1565C0</color>
+    <color name="badge_guest">#555555</color>
+    <color name="badge_outline">#CCCCCC</color>
+
+    <color name="medal_gold">#C8A200</color>
+    <color name="medal_silver">#8E8E93</color>
+    <color name="medal_bronze">#A9682B</color>
+    <color name="medal_none">#888888</color>
+
+    <color name="bounty">#E65100</color>
+    <color name="warning_container">#FFF3E0</color>
+    <color name="on_warning_container">#E65100</color>
+
 </resources>

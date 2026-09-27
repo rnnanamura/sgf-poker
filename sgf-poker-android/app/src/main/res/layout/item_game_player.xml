@@ -40,7 +40,7 @@
                 android:contentDescription="Member"
                 android:src="@android:drawable/btn_star"
                 android:visibility="gone"
-                app:tint="#1565C0" />
+                app:tint="@color/badge_member" />
 
             <CheckBox
                 android:id="@+id/checkComing"
